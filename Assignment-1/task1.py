@@ -1,3 +1,4 @@
+import os
 import string
 import pandas as pd
 
@@ -8,6 +9,9 @@ from nltk import wordpunct_tokenize
 from nltk.stem import PorterStemmer, WordNetLemmatizer
 
 from argparse import ArgumentParser as AP
+
+from matplotlib import pyplot as plt
+
 
 p = AP()
 p.add_argument('--datasrc', type=str, required=True,
@@ -65,5 +69,16 @@ for doc_id in doc_db_id:
     tmp = [tmp_w for tmp_w in tmp if tmp_w != '']  # Stemming and Lemmatization can cause empty string results
     all_counter += Counter(tmp)
 
-# Print the top 20 elements
-print(all_counter.most_common(20))
+# Print the top 20 terms
+print("Top 20 common terms")
+for mcw in all_counter.most_common(20):
+    print("{}: {}".format(mcw[0], mcw[1]))
+
+# Plot the frequency vs. rank graph
+plt.figure(figsize=(10, 8))
+plt.title('Frequency vs. Rank for the corpus {}'.format(os.path.basename), fontsize=20)
+plt.xlabel('Rank (1 to {})'.format(len(all_counter)), fontsize=15)
+plt.ylabel('Frequency', fontsize=15)
+plt.plot(list(range(1, len(all_counter) + 1)), sorted(all_counter.values(), reverse=True), linewidth=3.0, 'b-')
+plt.scatter(list(range(1, len(all_counter) + 1)), sorted(all_counter.values(), reverse=True), markersize=2.5, 'k')
+plt.show()
