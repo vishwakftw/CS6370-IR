@@ -2,10 +2,11 @@ import os
 import string
 import pandas as pd
 
+from tqdm import tqdm
 from collections import Counter
 
+from nltk import word_tokenize
 from nltk.corpus import stopwords
-from nltk import wordpunct_tokenize
 from nltk.stem import PorterStemmer, WordNetLemmatizer
 
 from argparse import ArgumentParser as AP
@@ -22,28 +23,33 @@ p.add_argument('--stem', action='store_true',
                          help='Toggle to stem the terms collected from the text')
 p.add_argument('--lemmatize', action='store_true',
                               help='Toggle to lemmative the terms collected from the text')
+p.add_argument('--log_scale', action='store_true',
+                              help='Toggle to generate graphs in log-scale')
 p = p.parse_args()
 
 NO_STOPWORD = p.remove_stopword
 STEM = p.stem
 LEMMATIZE = p.lemmatize
 
+# bar format for tqdm progress bar
+BAR_FORMAT = '{desc}{percentage:3.0f}% | {bar} | {n_fmt}/{total_fmt}'
+
 # Use Pandas for storing the text
 # Get the textual part of the dataset, and separate out the text and the doc ID
 doc_db = pd.read_csv(p.datasrc)
-doc_db_text = doc_db['Text'].
+doc_db_text = doc_db['Text']
 doc_db_id = doc_db['TextId']
 
 # Iterate over each document and perform the following
 # 1. Case folding: bring all documents to lower case
 # 2. Process text
-#   2a. Tokenize the documents
+#   2a. Tokenize the documents, and remove punctuation + digits
 #   2b. Remove stopwords (If required)
 #   2c. Stemming (If required)
 #   2d. Lemmatize (If required)
 # 3. Collect all the unique vocabulary from all the documents into a Counter object. This sorts by default
 
-TRANSLATION_TABLE = str.maketrans('', '', string.punctuation)
+TRANSLATION_TABLE = str.maketrans('', '', string.punctuation + string.digits)  # used to remove punctuation and digits
 
 if NO_STOPWORD:
     ALL_STOPWORDS = set(stopwords.words('english'))  # Set is faster because set uses hashes
@@ -52,11 +58,11 @@ if STEM:
 if LEMMATIZE:
     lemmatizer = WordNetLemmatizer()
 
-all_counter = Counter()
-for doc_id in doc_db_id:
+all_terms = []
+for doc_id in tqdm(doc_db_id, ascii=True, desc='processing', bar_format=BAR_FORMAT):
     tmp = doc_db_text[doc_id]
     tmp = tmp.lower()  # Case folding
-    tmp = tmp.translate(TRANSLATION_TABLE)  # Removal of punctuation
+    tmp = tmp.translate(TRANSLATION_TABLE)  # Removal of punctuation and digits
     tmp = word_tokenize(tmp)  # Tokenization
     
     if NO_STOPWORD:
@@ -67,7 +73,9 @@ for doc_id in doc_db_id:
         tmp = [lemmatizer.lemmatize(tmp_w) for tmp_w in tmp]  # Lemmatize
 
     tmp = [tmp_w for tmp_w in tmp if tmp_w != '']  # Stemming and Lemmatization can cause empty string results
-    all_counter += Counter(tmp)
+    all_terms += tmp
+
+all_counter = Counter(all_terms)
 
 # Print the top 20 terms
 print("Top 20 common terms")
@@ -76,9 +84,14 @@ for mcw in all_counter.most_common(20):
 
 # Plot the frequency vs. rank graph
 plt.figure(figsize=(10, 8))
-plt.title('Frequency vs. Rank for the corpus {}'.format(os.path.basename), fontsize=20)
+plt.title('Frequency vs. Rank for the corpus: {}'.format(os.path.basename(p.datasrc)), fontsize=20)
 plt.xlabel('Rank (1 to {})'.format(len(all_counter)), fontsize=15)
 plt.ylabel('Frequency', fontsize=15)
-plt.plot(list(range(1, len(all_counter) + 1)), sorted(all_counter.values(), reverse=True), linewidth=3.0, 'b-')
-plt.scatter(list(range(1, len(all_counter) + 1)), sorted(all_counter.values(), reverse=True), markersize=2.5, 'k')
+if p.log_scale:
+    plt.xscale('log')
+    plt.yscale('log')
+plt.plot(list(range(1, len(all_counter) + 1)), sorted(all_counter.values(), reverse=True),
+         'b-', linewidth=3.0, alpha=0.4)
+plt.scatter(list(range(1, len(all_counter) + 1)), sorted(all_counter.values(), reverse=True),
+            2.0, color='k')
 plt.show()
