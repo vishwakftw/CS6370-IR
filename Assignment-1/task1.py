@@ -1,5 +1,6 @@
 import os
 import string
+import warnings
 import pandas as pd
 
 from tqdm import tqdm
@@ -59,12 +60,16 @@ if LEMMATIZE:
     lemmatizer = WordNetLemmatizer()
 
 all_terms = []
-for doc_id in tqdm(doc_db_id, ascii=True, desc='processing', bar_format=BAR_FORMAT):
+all_warns = 0
+for doc_id in tqdm(range(len(doc_db_id)), ascii=True, desc='processing', bar_format=BAR_FORMAT):
     tmp = doc_db_text[doc_id]
-    tmp = tmp.lower()  # Case folding
+    try:
+        tmp = tmp.lower()  # Case folding
+    except:
+        all_warns += 1
+        continue
     tmp = tmp.translate(TRANSLATION_TABLE)  # Removal of punctuation and digits
     tmp = word_tokenize(tmp)  # Tokenization
-    
     if NO_STOPWORD:
         tmp = [tmp_w for tmp_w in tmp if tmp_w not in ALL_STOPWORDS]  # Stopword removal
     if STEM:
@@ -76,6 +81,8 @@ for doc_id in tqdm(doc_db_id, ascii=True, desc='processing', bar_format=BAR_FORM
     all_terms += tmp
 
 all_counter = Counter(all_terms)
+if all_warns != 0:
+    warnings.warn("There were {} empty documents".format(all_warns), RuntimeWarning)
 
 # Print the top 20 terms
 print("Top 20 common terms")

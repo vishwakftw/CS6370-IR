@@ -1,5 +1,6 @@
 import os
 import string
+import warnings
 import numpy as np
 import pandas as pd
 
@@ -39,9 +40,14 @@ TRANSLATION_TABLE = str.maketrans('', '', string.punctuation + string.digits)  #
 # all_pairs contains the cumulative count of distinct terms and the total tokens seen
 all_pairs = [[0, 0]]
 all_terms = set()
-for doc_id in tqdm(doc_db_id, ascii=True, desc='processing', bar_format=BAR_FORMAT):
+all_warns = 0
+for doc_id in tqdm(range(len(doc_db_id)), ascii=True, desc='processing', bar_format=BAR_FORMAT):
     tmp = doc_db_text[doc_id]
-    tmp = tmp.lower()  # Case folding
+    try:
+        tmp = tmp.lower()  # Case folding
+    except:
+        all_warns += 1
+        continue
     tmp = tmp.translate(TRANSLATION_TABLE)  # Removal of punctuation and digits
     tmp = word_tokenize(tmp)  # Tokenization
     tmp = [tmp_w for tmp_w in tmp if tmp_w != '']  # Remove empty string results
@@ -49,6 +55,8 @@ for doc_id in tqdm(doc_db_id, ascii=True, desc='processing', bar_format=BAR_FORM
     all_terms.update(set(tmp))
     all_pairs.append([all_pairs[-1][0] + len(tmp), len(all_terms)])
 all_pairs = np.array(all_pairs[1:])
+if all_warns != 0:
+    warnings.warn("There were {} empty documents".format(all_warns), RuntimeWarning)
 
 # Plot the #tokens vs. #terms graph -> Heaps' Law plot
 plt.figure(figsize=(10, 8))
