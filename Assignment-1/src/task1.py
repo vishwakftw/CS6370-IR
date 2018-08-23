@@ -101,4 +101,5 @@ plt.plot(list(range(1, len(all_counter) + 1)), sorted(all_counter.values(), reve
          'b-', linewidth=3.0, alpha=0.4)
 plt.scatter(list(range(1, len(all_counter) + 1)), sorted(all_counter.values(), reverse=True),
             2.0, color='k')
+plt.tight_layout()
 plt.show()

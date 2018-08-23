@@ -27,3 +27,5 @@ python <script> -h
 + If you are using `pip` as your package manager, run `pip install --user -r requirements.txt` to install these packages.
 
 + `nltk` requires a downloaded corpus for the stopword removal. If there are issues with `nltk` after installing regarding `nltk_data`, please run `python -c "import nltk ; nltk.download('popular')"`.
+
++ All these scripts are run using Python 3 only. Please don't except the scripts to run in Python 2.
