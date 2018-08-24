@@ -68,4 +68,5 @@ if p.log_scale:
     plt.yscale('log')
 plt.plot(all_pairs[:, 0], all_pairs[:, 1], 'b-', linewidth=3.0, alpha=0.4)
 plt.scatter(all_pairs[:, 0], all_pairs[:, 1], 2.0, color='k')
+plt.tight_layout()
 plt.show()

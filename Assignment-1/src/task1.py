@@ -1,6 +1,7 @@
 import os
 import string
 import warnings
+import numpy as np
 import pandas as pd
 
 from tqdm import tqdm
@@ -26,6 +27,8 @@ p.add_argument('--lemmatize', action='store_true',
                               help='Toggle to lemmative the terms collected from the text')
 p.add_argument('--log_scale', action='store_true',
                               help='Toggle to generate graphs in log-scale')
+p.add_argument('--linear_fit', action='store_true',
+                               help='Toggle to compute the linear fit')
 p = p.parse_args()
 
 NO_STOPWORD = p.remove_stopword
@@ -101,4 +104,11 @@ plt.plot(list(range(1, len(all_counter) + 1)), sorted(all_counter.values(), reve
          'b-', linewidth=3.0, alpha=0.4)
 plt.scatter(list(range(1, len(all_counter) + 1)), sorted(all_counter.values(), reverse=True),
             2.0, color='k')
+plt.tight_layout()
 plt.show()
+
+if p.linear_fit:
+    xs = np.log10(np.arange(1, len(all_counter) + 1, 1))
+    ys = np.log10(np.array(sorted(all_counter.values(), reverse=True)))
+    solution = np.polyfit(xs, ys, 1)
+    print("negative slope: {}, intercept: {}".format(round(-solution[0], 3), round(solution[1], 3)))
