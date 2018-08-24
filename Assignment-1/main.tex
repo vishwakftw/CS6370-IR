@@ -96,4 +96,48 @@ Processing Steps & Top 20 Words & Processing Steps & Top 20 Words \\
 \end{tabular}
 \end{center}
 \end{flushleft}
+
+\subsubsection{Observations}
+\begin{flushleft}
+Statistically, a few things worth noting:
+\begin{itemize}
+\item The number of terms before stopword removal is greater than the number of terms after stopwords have been removed.
+\item The number of terms before stemming / lemmatization is greater than the number of terms after stemming / lemmatization has been performed.
+\item The number of terms after stemming is smaller than the number of terms after lemmatization.
+\item The number of terms after performing stopword removal, stemming and lemmatization is smallest amongst all processing steps performed.
+\end{itemize}
+From the above points, one can build an ordering the processing steps based on the number of terms obtained:
+\begin{center}
+Terms from raw data \(>\) Terms from stopword removal \(>\) Terms from lemmatization \(>\) Terms from stemming \(>\) Terms from stopword removal, lemmatization and stemming
+\end{center}
+
+From the plots, note that these are log-log plots of the rank versus frequency. Using a generalized power law i.e.,
+\begin{equation}
+\label{gen-zipf}
+y = \frac{c}{x^{m}} \Rightarrow \log y = \log c - m \log x
+\end{equation}
+we found out the best parameters. Ideally we would like for \(m\) to be as close to \(1\) as possible. Below are the values found for the two datasets, after each processing:
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\multicolumn{3}{|c|}{Dataset 1} & \multicolumn{3}{|c|}{Dataset 2} \\
+\hline
+Processing & \(m\) & Intercept (\(\log c\)) & Processing & \(m\) & Intercept (\(\log c\)) \\
+\hline
+\hline
+[1,2] & 1.018 & 5.109 & [1,2] & 1.424 & 7.183\\
+\hline
+[1,2,3] & 0.998 & 5.011 & [1,2,3] & 1.407 & 7.099\\
+\hline
+[1,2,4] & 0.943 & 4.684 & [1,2,4] & 1.406 & 6.932\\
+\hline
+[1,2,5] & 0.987 & 4.942 & [1,2,5] & 1.408 & 7.06\\
+\hline
+[1,2,3,4,5] & 0.922 & 4.581 & [1,2,3,4,5] & 1.386 & 6.833\\
+\hline
+\end{tabular}
+\end{center}
+
+In both the datasets, we are able to see that more processing causing the slope to decrease in Eqn \ref{gen-zipf}. The intercept is affected in a similar manner. From a raw graphical perspective, we can notice that the raw data is more linear than the ones obtained after processing. In fact, the linearity fades as we perform more processing on the dataset in the form of stopword removal and/or stemming and/or lemmatization.
+\end{flushleft}
 \end{document}
