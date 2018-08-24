@@ -19,6 +19,8 @@ p.add_argument('--datasrc', type=str, required=True,
                             help='Source for the documents. To be presented in CSV format')
 p.add_argument('--log_scale', action='store_true',
                               help='Toggle to generate graphs in log-scale')
+p.add_argument('--linear_fit', action='store_true',
+                               help='Toggle to compute the linear fit')
 p = p.parse_args()
 
 # bar format for tqdm progress bar
@@ -70,3 +72,9 @@ plt.plot(all_pairs[:, 0], all_pairs[:, 1], 'b-', linewidth=3.0, alpha=0.4)
 plt.scatter(all_pairs[:, 0], all_pairs[:, 1], 2.0, color='k')
 plt.tight_layout()
 plt.show()
+
+if p.linear_fit:
+    xs = np.log10(all_pairs[:, 0])
+    ys = np.log10(all_pairs[:, 1])
+    solution = np.polyfit(xs, ys, 1)
+    print("slope: {}, intercept: {}".format(round(solution[0], 3), round(solution[1], 3)))

@@ -52,6 +52,7 @@ For the base analysis, points 1 and 2 are considered. Subsequent processing invo
 Below are the plots obtained for Dataset 1 (CSV) and Dataset 2 (JSON).
 \begin{figure}[H]
 \begin{minipage}{0.45\linewidth}
+\centering
 \includegraphics[width=0.75\textwidth]{./images/dataset-1-t1-0.png}
 \includegraphics[width=0.75\textwidth]{./images/dataset-1-t1-1.png}
 \includegraphics[width=0.75\textwidth]{./images/dataset-1-t1-2.png}
@@ -60,6 +61,7 @@ Below are the plots obtained for Dataset 1 (CSV) and Dataset 2 (JSON).
 \end{minipage}
 \hfill
 \begin{minipage}{0.45\linewidth}
+\centering
 \includegraphics[width=0.75\textwidth]{./images/dataset-2-t1-0.png}
 \includegraphics[width=0.75\textwidth]{./images/dataset-2-t1-1.png}
 \includegraphics[width=0.75\textwidth]{./images/dataset-2-t1-2.png}
@@ -120,9 +122,9 @@ we found out the best parameters. Ideally we would like for \(m\) to be as close
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
-\multicolumn{3}{|c|}{Dataset 1} & \multicolumn{3}{|c|}{Dataset 2} \\
+\multicolumn{3}{|c|}{Dataset 1} & \multicolumn{3}{|c|}{Dataset 2}\\
 \hline
-Processing & \(m\) & Intercept (\(\log c\)) & Processing & \(m\) & Intercept (\(\log c\)) \\
+Processing & \(m\) & Intercept (\(\log c\)) & Processing & \(m\) & Intercept (\(\log c\))\\
 \hline
 \hline
 [1,2] & 1.018 & 5.109 & [1,2] & 1.424 & 7.183\\
@@ -139,5 +141,50 @@ Processing & \(m\) & Intercept (\(\log c\)) & Processing & \(m\) & Intercept (\(
 \end{center}
 
 In both the datasets, we are able to see that more processing causing the slope to decrease in Eqn \ref{gen-zipf}. The intercept is affected in a similar manner. From a raw graphical perspective, we can notice that the raw data is more linear than the ones obtained after processing. In fact, the linearity fades as we perform more processing on the dataset in the form of stopword removal and/or stemming and/or lemmatization.
+\end{flushleft}
+
+\section{Task 2: Verification of Heaps' Law}
+Text processing for this task involved steps 1 and 2 describes in the previous section.
+\subsection{Plots and Observations}
+\subsubsection{Plots}
+\begin{flushleft}
+\begin{figure}[H]
+\begin{minipage}{0.45\linewidth}
+\centering
+\includegraphics[width=0.75\textwidth]{./images/dataset-1-t2-0.png}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\linewidth}
+\centering
+\includegraphics[width=0.75\textwidth]{./images/dataset-2-t2-0.png}
+\end{minipage}
+\caption{Results for Dataset 1 (Left) and Dataset 2 (Right).\newline{}These are log plots for better visualization.}
+\end{figure}
+\end{flushleft}
+
+\subsubsection{Observations}
+\begin{flushleft}
+Visual observation suggests that these plots are very "linear". This verifies the generalized Heaps' Law. Fitting the log-log plot to a linear function, gives us the values of the constants in Heaps' Law:
+\begin{equation}
+V = \alpha T^{\beta} \Rightarrow \log V = \beta \log T + \log \alpha
+\end{equation}
+Below are the computed values of \(\beta\) and \(\log \alpha\) from a best linear fit:
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\multicolumn{2}{|c|}{Dataset 1} & \multicolumn{2}{|c|}{Dataset 2}\\
+\hline
+\(\beta\) & \(\log \alpha\) & \(\beta\) & \(\log \alpha\)\\
+\hline
+\hline
+0.731 & 0.379 & 0.606 & 1.07 \\
+\hline
+\end{tabular}
+\end{center}
+
+From Wikipedia, for typical English text corpora, the values of \(\beta\) is between 0.4 and 0.6, while the values of \(\alpha\) is between 10 and 100, which means \(\log \alpha\) is between 1 and 2. From this, one can call dataset 1 as a "non-typical" English text corpus, while dataset 2 is still close to the ranges.
+\(\newline\)
+
+On close observation, one can see that there are more points concentrated at the left end of the seemingly straight line. This is nothing very special, it is primarily due to the nature of the log-log plot.
 \end{flushleft}
 \end{document}
