@@ -28,4 +28,4 @@ python <script> -h
 
 + `nltk` requires a downloaded corpus for the stopword removal. If there are issues with `nltk` after installing regarding `nltk_data`, please run `python -c "import nltk ; nltk.download('popular')"`.
 
-+ All these scripts are run using Python 3 only. Please don't except the scripts to run in Python 2.
++ All these scripts are run using Python 3 only. Please don't expect the scripts to run in Python 2.
