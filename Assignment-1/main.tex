@@ -35,8 +35,8 @@ The main scripts provided work fine on datasets in the CSV format. For this we h
 \begin{flushleft}
 Below are the steps for processing:
 \begin{enumerate}
-\item Case Folding - convert all documents to lower case.
-\item Removal of special characters and digits - all special characters (quotes, commas, apostrophes, fullstops, etc.) and digits (0 to 9) were removed. This meant that at the end of this step we had nothing but raw text composed of alphabets alone.
+\item Case Folding - convert all documents to lower case. For example: ``I didn't create Atlantis'' becomes ``i didn't create atlantis''.
+\item Removal of special characters and digits - all special characters (quotes, commas, apostrophes, fullstops, etc.) and digits (0 to 9) were removed. This meant that at the end of this step we had nothing but raw text composed of alphabets alone. For example: ``don't'' becomes ``dont'' and ``ariane-5'' becomes ``ariane''.
 \item Removal of stop words - using \texttt{NLTK}'s corpus of stop words, this was easy.
 \item Stemming - using \texttt{NLTK}'s \texttt{PorterStemmer} we were able to do this.
 \item Lemmatization - for this we used \texttt{NLTK}'s \texttt{WordNetLemmatizer}.
