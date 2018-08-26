@@ -1,7 +1,10 @@
-from bs4 import BeautifulSoup
-import requests
-import re
 import os
+import re
+import sys
+import requests
+
+from bs4 import BeautifulSoup
+
 
 book_url = 'https://www.gutenberg.org/files/1342/1342-h/1342-h.htm'
 output_base_path = os.path.join('..', 'data')  # path to write output txt files
@@ -9,7 +12,11 @@ output_base_path = os.path.join('..', 'data')  # path to write output txt files
 # Can define specific Chapter styles if need more general, for now, using
 # Pride and Prejudice
 
-r = requests.get(book_url)  # TODO - check if this failed?
+try:
+    r = requests.get(book_url)
+except requests.exceptions.RequestException as e:
+    print("There has been a network issue, which has caused an exception. Details below:\n{}".format(e))
+    sys.exit(1)
 html_file = r.text
 
 story_soup = BeautifulSoup(html_file, 'lxml')
@@ -41,8 +48,7 @@ else:
 stripped_story_text = ''
 
 for chapter in range(len(chapter_indices) - 1):
-    chapter_text = story_text[chapter_indices[chapter][
-        1]: chapter_indices[chapter + 1][0]]
+    chapter_text = story_text[chapter_indices[chapter][1]: chapter_indices[chapter + 1][0]]
     with open(os.path.join(output_base_path, str(chapter + 1) + '_' + 'Book' + '_text.txt'), 'w') as f:
         f.write(chapter_text)
     stripped_story_text += (chapter_text + '\n')
