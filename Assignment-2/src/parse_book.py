@@ -1,21 +1,18 @@
-import argparse
 import os
 import re
 import sys
 import requests
 
+from argparse import ArgumentParser
 from bs4 import BeautifulSoup
 
 
 def get_parse_save_book(args):
     book_url = args.book_url
-    # path to write output txt files
     output_base_path = args.save_path
     if args.verbose:
         print("Book URL: " + book_url)
         print("Save path: " + output_base_path)
-    # Can define specific Chapter styles if need more general, for now, using
-    # Pride and Prejudice
 
     try:
         r = requests.get(book_url)
@@ -42,7 +39,11 @@ def get_parse_save_book(args):
         chapter_indices.append(chapter_index)
         current_chapter += 1
 
-    end_text = 'End of the Project Gutenberg'  # Not always true
+    # Text that marks the end of the book. Books in Project Gutenberg seem t
+    # all have some variation of this, but this exact text will not work for
+    # all cases. Written specifically for 'Pride and Prejudice' by Jane
+    # Austen. Edit this as applicable for other books.
+    end_text = 'End of the Project Gutenberg'
     it = re.finditer(end_text, story_text)
     end_ids = [(i.start(), i.end()) for i in it]
     if len(end_ids) > 0:
@@ -53,10 +54,9 @@ def get_parse_save_book(args):
     stripped_story_text = ''
 
     for chapter in range(len(chapter_indices) - 1):
-        chapter_text = story_text[chapter_indices[
-            chapter][1]: chapter_indices[chapter + 1][0]]
-        chapter_output_path = os.path.join(output_base_path, str(
-            chapter + 1) + '_' + book_url.replace('/', '.') + '_text.txt')
+        chapter_text = story_text[chapter_indices[chapter][1]: chapter_indices[chapter + 1][0]]
+        chapter_output_path = os.path.join(output_base_path,
+                                           str(chapter + 1) + '_' + book_url.replace('/', '.') + '_text.txt')
         with open(chapter_output_path, 'w') as f:
             f.write(chapter_text)
         if args.verbose:
@@ -72,12 +72,15 @@ def get_parse_save_book(args):
         print("Written book to " + book_output_path)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description='Given a URL of a book in HTML format, this script fetches the book, splits text into separate chapters, and saves the complete book and each individual chapter in text files. Currently works for "Pride and Prejudice" by Jane Austen from Project Gutenberg.')
+    parser = ArgumentParser(
+        description='Given a URL of a book in HTML format, this script fetches \
+        the book, splits text into separate chapters, and saves the complete bo\
+        ok and each individual chapter in text files. Currently works for "Prid\
+        e and Prejudice" by Jane Austen from Project Gutenberg.')
     parser.add_argument(
-        '--book_url', default='https://www.gutenberg.org/files/1342/1342-h/1342-h.htm', type=str, required=False, help='URL of HTML book')
+        '--book_url', default='https://www.gutenberg.org/files/1342/1342-h/1342-h.htm', type=str, help='URL of HTML book')
     parser.add_argument('--save_path', default=os.path.join('..', 'data'), type=str,
-                        required=False, help='Path to the directory where generated text files are to be saved.')
+                        help='Path to the directory where generated text files are to be saved.')
     parser.add_argument('--v', '--verbose', help='Run in verbose mode',
                         dest='verbose', action='store_true')
     args = parser.parse_args()

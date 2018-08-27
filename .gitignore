@@ -19,3 +19,6 @@ datasets/
 # HTML files for stories
 *.htm
 *.html
+
+# Backup files
+*~
