@@ -1,3 +1,4 @@
+import argparse
 import os
 import re
 import sys
@@ -6,52 +7,78 @@ import requests
 from bs4 import BeautifulSoup
 
 
-book_url = 'https://www.gutenberg.org/files/1342/1342-h/1342-h.htm'
-output_base_path = os.path.join('..', 'data')  # path to write output txt files
+def get_parse_save_book(args):
+    book_url = args.book_url
+    # path to write output txt files
+    output_base_path = args.save_path
+    if args.verbose:
+        print("Book URL: " + book_url)
+        print("Save path: " + output_base_path)
+    # Can define specific Chapter styles if need more general, for now, using
+    # Pride and Prejudice
 
-# Can define specific Chapter styles if need more general, for now, using
-# Pride and Prejudice
+    try:
+        r = requests.get(book_url)
+    except requests.exceptions.RequestException as e:
+        print("There has been a network issue, which has caused an exception. Details below:\n{}".format(e))
+        sys.exit(1)
 
-try:
-    r = requests.get(book_url)
-except requests.exceptions.RequestException as e:
-    print("There has been a network issue, which has caused an exception. Details below:\n{}".format(e))
-    sys.exit(1)
-html_file = r.text
+    html_file = r.text
 
-story_soup = BeautifulSoup(html_file, 'lxml')
-story_text = story_soup.get_text()
+    story_soup = BeautifulSoup(html_file, 'lxml')
+    story_text = story_soup.get_text()
 
-chapter_indices = []
-current_chapter = 1
+    chapter_indices = []
+    current_chapter = 1
 
+    while True:
+        chapter_regex = 'Chapter ' + str(current_chapter) + '(?![0-9])'
+        it = re.finditer(chapter_regex, story_text)
+        chapter_ids = [(i.start(), i.end()) for i in it]
+        if len(chapter_ids) > 0:
+            chapter_index = chapter_ids[-1]
+        else:
+            break
+        chapter_indices.append(chapter_index)
+        current_chapter += 1
 
-while True:
-    chapter_regex = 'Chapter ' + str(current_chapter) + '(?![0-9])'
-    it = re.finditer(chapter_regex, story_text)
-    chapter_ids = [(i.start(), i.end()) for i in it]
-    if len(chapter_ids) > 0:
-        chapter_index = chapter_ids[-1]
+    end_text = 'End of the Project Gutenberg'  # Not always true
+    it = re.finditer(end_text, story_text)
+    end_ids = [(i.start(), i.end()) for i in it]
+    if len(end_ids) > 0:
+        chapter_indices.append(end_ids[-1])
     else:
-        break
-    chapter_indices.append(chapter_index)
-    current_chapter += 1
+        chapter_indices.append((len(story_text), len(story_text)))
 
-end_text = 'End of the Project Gutenberg'  # Not always true
-it = re.finditer(end_text, story_text)
-end_ids = [(i.start(), i.end()) for i in it]
-if len(end_ids) > 0:
-    chapter_indices.append(end_ids[-1])
-else:
-    chapter_indices.append((len(story_text), len(story_text)))
+    stripped_story_text = ''
 
-stripped_story_text = ''
+    for chapter in range(len(chapter_indices) - 1):
+        chapter_text = story_text[chapter_indices[
+            chapter][1]: chapter_indices[chapter + 1][0]]
+        chapter_output_path = os.path.join(output_base_path, str(
+            chapter + 1) + '_' + book_url.replace('/', '.') + '_text.txt')
+        with open(chapter_output_path, 'w') as f:
+            f.write(chapter_text)
+        if args.verbose:
+            print("Written Chapter " + str(chapter + 1) +
+                  " to " + chapter_output_path)
+        stripped_story_text += (chapter_text + '\n')
 
-for chapter in range(len(chapter_indices) - 1):
-    chapter_text = story_text[chapter_indices[chapter][1]: chapter_indices[chapter + 1][0]]
-    with open(os.path.join(output_base_path, str(chapter + 1) + '_' + 'Book' + '_text.txt'), 'w') as f:
-        f.write(chapter_text)
-    stripped_story_text += (chapter_text + '\n')
+    book_output_path = os.path.join(
+        output_base_path, book_url.replace('/', '.') + '_text.txt')
+    with open(book_output_path, 'w') as f:
+        f.write(stripped_story_text)
+    if args.verbose:
+        print("Written book to " + book_output_path)
 
-with open(os.path.join(output_base_path, 'Book' + '_text.txt'), 'w') as f:
-    f.write(stripped_story_text)
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description='Given a URL of a book in HTML format, this script fetches the book, splits text into separate chapters, and saves the complete book and each individual chapter in text files. Currently works for "Pride and Prejudice" by Jane Austen from Project Gutenberg.')
+    parser.add_argument(
+        '--book_url', default='https://www.gutenberg.org/files/1342/1342-h/1342-h.htm', type=str, required=False, help='URL of HTML book')
+    parser.add_argument('--save_path', default=os.path.join('..', 'data'), type=str,
+                        required=False, help='Path to the directory where generated text files are to be saved.')
+    parser.add_argument('--v', '--verbose', help='Run in verbose mode',
+                        dest='verbose', action='store_true')
+    args = parser.parse_args()
+    get_parse_save_book(args)
