@@ -12,3 +12,13 @@ datasets/
 *.bbl
 *.xml
 *.pdf
+
+# Text files for stories
+*.txt
+
+# HTML files for stories
+*.htm
+*.html
+
+# Backup files
+*~
