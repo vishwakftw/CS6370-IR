@@ -12,6 +12,7 @@ datasets/
 *.bbl
 *.xml
 *.pdf
+*.synctex.gz
 
 # Text files for stories
 *.txt

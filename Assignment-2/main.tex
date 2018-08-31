@@ -5,6 +5,7 @@
 \usepackage{bookmark}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{hyperref}
 
 \title{Report for Assignment - 2: CS6370 - \\Information Retrieval}
 \author{
@@ -21,20 +22,34 @@ Vishwak Srinivasan\\\texttt{CS15BTECH11043}
 
 \section{Introduction}
 \begin{flushleft}
-	TODO
+TODO
 \end{flushleft}
 
 \section{Processing}
 \subsection{Task 1: Crawling \& Parsing HTML}
 \begin{flushleft}
-	TODO
+The first step is to get the book in HTML form, given its URL, and to split it into text files for individual chapters. This involves fetching the book, extracting the text content, and parsing it to remove irrelevant text, such as metadata. Then, the book is separated into chapters. This separation is dependent on the pattern in which chapters are demarcated in each book, and would vary from book to book. Hence, our script for parsing the book assumes a specific book - \textit{\href{https://www.gutenberg.org/files/1342/1342-h/1342-h.htm}{Pride and Prejudice}} by Jane Austen, from \href{https://www.gutenberg.org}{Project Gutenberg}. However, many books on Project Gutenberg are found in very similar formats, and it should be easy to modify the script to cater to other books. The code for fetching, parsing, separating the book into chapters, and saving each chapter in a separate text file can be found in \verb|parse_book.py|.
+
+The procedure is as follows:
+\begin{enumerate}
+	\item The book in HTML form is fetched from the URL specified. Using the \verb|BeautifulSoup| package, it is converted entirely to text.
+	\item Using regular expressions, points of demarcation of individual chapters are found. Similarly, the point demarcating the end of the book is also found.
+	\item The book text is split into individual chapters. Each chapter is saved in the separate text file in the output path specified.
+	\item The file name for each chapter includes the URL where the book was obtained from. However, forward slashes (\verb|/|) are replaced with the \verb|#| character.
+\end{enumerate}
+
+\subsubsection*{Notes}
+\begin{enumerate}
+	\item To use the script for other Project Gutenberg books, the regular experssions for finding the chapter demarcator and the demarcator for the end of the book may have to be modified.
+	\item Usage instructions in further detail can be found in the \verb|README.md| file.
+\end{enumerate}
 \end{flushleft}
 \newpage
 
 \subsection{Task 2}
 \subsection{Text processing of the datasets}
 \begin{flushleft}
-	Below are the steps for processing:
+	The following are the steps for processing:
 	\begin{enumerate}
 		\item Case Folding - convert all documents to lower case. For example: ``I didn't create Atlantis'' becomes ``i didn't create atlantis''.
 		\item Removal of special characters and digits - all special characters (quotes, commas, apostrophes, fullstops, etc.) and digits (0 to 9) were removed. This meant that at the end of this step we had nothing but raw text composed of alphabets alone. For example: ``don't'' becomes ``dont'' and ``ariane-5'' becomes ``ariane''.
@@ -46,7 +61,7 @@ Vishwak Srinivasan\\\texttt{CS15BTECH11043}
 \section{Plots, Top 20 words and Observations - Chapter Wise}
 \subsection{Plots}
 \begin{flushleft}
-	Below are the frequency distribution plots obtained for 10 out of 62 chapters. 
+	The following are the frequency distribution plots obtained for 10 out of 62 chapters. 
 	\begin{figure}[H]
 		\begin{minipage}{0.45\linewidth}
 			\centering
@@ -71,7 +86,7 @@ Vishwak Srinivasan\\\texttt{CS15BTECH11043}
 
 \subsection{Top 20 words}
 \begin{flushleft}
-	The top 20 words (based on frequency) obtained for 10 chapters :
+	The top 20 words (based on frequency) obtained for 10 chapters are as follows:
 	\begin{center}
 		\begin{tabular}{|p{0.08\textwidth}|p{0.37\textwidth}||p{0.08\textwidth}|p{0.37\textwidth}|}
 			\hline
