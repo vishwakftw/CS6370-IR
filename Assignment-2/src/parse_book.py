@@ -13,6 +13,8 @@ def get_parse_save_book(args):
     if args.verbose:
         print("Book URL: " + book_url)
         print("Save path: " + output_base_path)
+    if not os.path.exists(output_base_path):
+        os.makedirs(output_base_path)
 
     try:
         r = requests.get(book_url)
@@ -39,7 +41,7 @@ def get_parse_save_book(args):
         chapter_indices.append(chapter_index)
         current_chapter += 1
 
-    # Text that marks the end of the book. Books in Project Gutenberg seem t
+    # Text that marks the end of the book. Books in Project Gutenberg seem to
     # all have some variation of this, but this exact text will not work for
     # all cases. Written specifically for 'Pride and Prejudice' by Jane
     # Austen. Edit this as applicable for other books.
@@ -55,21 +57,17 @@ def get_parse_save_book(args):
 
     for chapter in range(len(chapter_indices) - 1):
         chapter_text = story_text[chapter_indices[chapter][1]: chapter_indices[chapter + 1][0]]
+        chapter_text = chapter_text.replace("“", '"').replace(
+            "”", '"')  # "curly" is technically not valid
+        # file names cannot have forward slashes, so replacing with '#'
         chapter_output_path = os.path.join(output_base_path,
-                                           str(chapter + 1) + '_' + book_url.replace('/', '_') + '_text.txt')
+                                           str(chapter + 1) + '_' + book_url.replace('/', '#') + '_text.txt')
         with open(chapter_output_path, 'w') as f:
             f.write(chapter_text)
         if args.verbose:
             print("Written Chapter " + str(chapter + 1) +
                   " to " + chapter_output_path)
         stripped_story_text += (chapter_text + '\n')
-
-    book_output_path = os.path.join(
-        output_base_path, book_url.replace('/', '_') + '_text.txt')
-    with open(book_output_path, 'w') as f:
-        f.write(stripped_story_text)
-    if args.verbose:
-        print("Written book to " + book_output_path)
 
 if __name__ == "__main__":
     parser = ArgumentParser(
@@ -81,7 +79,7 @@ if __name__ == "__main__":
         '--book_url', default='https://www.gutenberg.org/files/1342/1342-h/1342-h.htm', type=str, help='URL of HTML book')
     parser.add_argument('--save_path', default=os.path.join('..', 'data'), type=str,
                         help='Path to the directory where generated text files are to be saved.')
-    parser.add_argument('--v', '--verbose', help='Run in verbose mode',
+    parser.add_argument('-v', '--verbose', help='Run in verbose mode',
                         dest='verbose', action='store_true')
     args = parser.parse_args()
     get_parse_save_book(args)
