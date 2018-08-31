@@ -7,7 +7,7 @@
 \usepackage{float}
 \usepackage{hyperref}
 
-\title{Report for Assignment - 2: CS6370 - \\Information Retrieval}
+\title{Report for Assignment - 2 \\ CS6370: Information Retrieval}
 \author{
 Harsh Agarwal\\\texttt{CS15BTECH11019}
 \and
@@ -26,7 +26,7 @@ TODO
 \end{flushleft}
 
 \section{Processing}
-\subsection{Task 1: Crawling \& Parsing HTML}
+\subsection{Crawling and Parsing HTML}
 \begin{flushleft}
 The first step is to get the book in HTML form, given its URL, and to split it into text files for individual chapters. This involves fetching the book, extracting the text content, and parsing it to remove irrelevant text, such as metadata. Then, the book is separated into chapters. This separation is dependent on the pattern in which chapters are demarcated in each book, and would vary from book to book. Hence, our script for parsing the book assumes a specific book - \textit{\href{https://www.gutenberg.org/files/1342/1342-h/1342-h.htm}{Pride and Prejudice}} by Jane Austen, from \href{https://www.gutenberg.org}{Project Gutenberg}. However, many books on Project Gutenberg are found in very similar formats, and it should be easy to modify the script to cater to other books. The code for fetching, parsing, separating the book into chapters, and saving each chapter in a separate text file can be found in \verb|parse_book.py|.
 
@@ -46,7 +46,6 @@ The procedure is as follows:
 \end{flushleft}
 \newpage
 
-\subsection{Task 2}
 \subsection{Text processing of the datasets}
 \begin{flushleft}
 	The following are the steps for processing:
