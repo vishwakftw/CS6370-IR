@@ -1,6 +1,7 @@
 import os
 import string
 import warnings
+import numpy as np
 
 from tqdm import tqdm
 from collections import Counter
@@ -14,22 +15,35 @@ from argparse import ArgumentParser as AP
 from matplotlib import pyplot as plt
 
 
+def compute_entropy_from_matrix(matrix):
+    """
+    Utility function to compute the entropy from a matrix
+    """
+    count_list = np.sum(matrix, axis=0)
+    prob_matrix = matrix / count_list
+    prob_matrix[np.isnan(prob_matrix)] = 0  # This will make 0/0 errors not cause issue later on
+    prob_matrix = prob_matrix * np.log(prob_matrix)
+    prob_matrix[np.isinf(prob_matrix)] = 0  # This will make log(0) = -inf not cause issues later on
+    clf_list = -np.sum(prob_matrix, axis=0)
+    return clf_list
+
+
 p = AP()
 p.add_argument('--datasrc', type=str, required=True,
                             help='Directory where the documents are stored. Files to be presented in TXT format')
 p.add_argument('--top_k', type=int, default=20,
-               help='number of top words for the analysis')
+               help='Number of top words for the analysis')
 p.add_argument('--top_k_scheme', default='frequency',
                choices=['frequency', 'entropy', 'custom'], 
-               help='scheme to use to find top_k words for the analysis')
+               help='Scheme to use to find top_k words for the analysis')
 p.add_argument('--chapter_wise', action='store_true',
                help='Toggle to perform the analysis chapter wise')
-p.add_argument('--log_scale', action='store_true',
-                              help='Toggle to generate graphs in log-scale')
+p.add_argument('--scatter_freq_entropy', action='store_true',
+                                         help='Toggle to get the scatter plot of entropy and frequency')
 
 p = p.parse_args()
 
-if p.chapter_wise and p.top_k_scheme != "frequency":
+if p.chapter_wise and (p.top_k_scheme != "frequency" or p.scatter_freq_entropy):
     raise ValueError("Chapter-wise top-k words can be only found using a frequency-based technique")
 
 # bar format for tqdm progress bar
@@ -83,6 +97,8 @@ for doc_id in tqdm(range(len(doc_db_filepath)), ascii=True, desc='processing', b
         chapter_counters.append((doc_id, Counter(tmp)))
         cur_dictionary.update(tmp)
 
+cur_dictionary = list(cur_dictionary)
+
 if all_warns != 0:
     warnings.warn("There were {} empty documents".format(all_warns), RuntimeWarning)
 
@@ -104,7 +120,7 @@ if p.chapter_wise:
             print("{}: {}".format(mcw[0], mcw[1]))
         print("=====\n")
 
-        plt.figure(figsize=(10,8))
+        plt.figure(figsize=(10, 8))
         plt.title('Frequency distribution for chapter {}'.format(doc_id))
         plt.hist(cnt.values(), bins='auto')
         plt.xlabel('Number of occurrences')
@@ -114,29 +130,37 @@ if p.chapter_wise:
 else:
     # This is top-k for the entire book
     # Scheme matters here
-    # Total count for every term is a default requirement
-    term_count_list = []
-    for t in cur_dictionary:
-        count = 0
-        for cnt in chapter_counters:
-            count += cnt[t]
-        term_count_list.append([t, count])
+    # We will build a matrix of counts per chapters for every term in the dictionary
+    # Every row in the dictionary is the count for a different terms in one chapter
+    term_matrix = np.array([[cnt[t] for t in cur_dictionary] for cnt in chapter_counters])
 
     if p.top_k_scheme == "frequency":
-        term_count_list = sorted(term_count_list, key=lambda x: x[1], reverse=True)
-        print("Top-{} words in the book by {}".format(p.top_k, p.top_k_scheme))
-        for mcw in term_count_list[:p.top_k]:
-            print("{}: {}".format(mcw[0], mcw[1]))
-
-        plt.figure(figsize=(10,8))
-        plt.title('Frequency distribution for book')
-        plt.hist([count for t, count in term_count_list], bins='auto')  # Just the first column would do
-        plt.xlabel('Number of occurrences')
-        plt.ylabel('Number of terms')
-        plt.show()
+        term_clf_list = np.sum(term_matrix, axis=0)
+        indexes = np.argsort(term_clf_list)[::-1]  # Reverse order i.e., descending
 
     if p.top_k_scheme == "entropy":
+        term_clf_list = compute_entropy_from_matrix(term_matrix)
+        indexes = np.argsort(term_clf_list)[::-1]  # Reverse order i.e., descending
+
+    if p.top_k_scheme == "custom":
         # TODO
 
-    if p.top_k_scheme == "gini":
-        # TODO
+    print("Top-{} words in the book by {}".format(p.top_k, p.top_k_scheme))
+    for index in indexes[:p.top_k]:
+        print("{}: {}".format(cur_dictionary[index], term_clf_list[index]))
+
+    plt.figure(figsize=(10, 8))
+    plt.title('Frequency distribution for book')
+    plt.hist(term_clf_list, bins='auto')
+    plt.show()
+
+    if p.scatter_freq_entropy:
+        # Compute the total occurrences of every term in the book
+        term_count_list = np.sum(term_matrix, axis=0)
+        term_entropy_list = compute_entropy_from_matrix(term_matrix)
+        plt.figure(figsize=(10, 8))
+        plt.title('Entropy vs. Frequency plot')
+        plt.xlabel('Entropy')
+        plt.ylabel('Frequency')
+        plt.scatter(term_entropy_list, term_count_list, 3.0, color='b', alpha=0.7)
+        plt.show()
