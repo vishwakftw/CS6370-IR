@@ -3,7 +3,7 @@
 #### What is in this folder?
 + There are two Python scripts: `parse_book.py` and `task.py`.
 
-+ `parse_book.py` obtains the book from a given URL and separates it into chapters as specified in the assignment statement.
++ `parse_book.py` obtains the book from a given URL and separates it into chapters as specified in the assignment statement. Please note that `/` is not a valid character in a filename, which is why the `/`s in the URL have been replaced with `#`s.
 
 + `task.py` performs the required tasks on the book saved.
 
