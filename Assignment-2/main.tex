@@ -5,6 +5,7 @@
 \usepackage{bookmark}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{hyperref}
 
 \title{Report for Assignment - 2: CS6370 - \\Information Retrieval}
 \author{
@@ -26,7 +27,22 @@ Vishwak Srinivasan\\\texttt{CS15BTECH11043}
 
 \section{Task 1: Crawling \& Parsing HTML}
 \begin{flushleft}
-    TODO
+The first step is to get the book in HTML form, given its URL, and to split it into text files for individual chapters. This involves fetching the book, extracting the text content, and parsing it to remove irrelevant text, such as metadata. Then, the book is separated into chapters. This separation is dependent on the pattern in which chapters are demarcated in each book, and would vary from book to book. Hence, our script for parsing the book assumes a specific book - \textit{\href{https://www.gutenberg.org/files/1342/1342-h/1342-h.htm}{Pride and Prejudice}} by Jane Austen, from \href{https://www.gutenberg.org}{Project Gutenberg}. However, many books on Project Gutenberg are found in very similar formats, and it should be easy to modify the script to cater to other books. The code for fetching, parsing, separating the book into chapters, and saving each chapter in a separate text file can be found in \verb|parse_book.py|.
+
+The procedure is as follows:
+\begin{enumerate}
+	\item The user, when invoking the script, specifies the book URL (default - \textit{Pride and Prejudice} from Project Gutenberg) and the path where the text files for each chapter must be saved (defult - a \verb|data/| directory inside the \verb|Assignment-2| directory). A directory is created as specified by the output path if it does not exist. Further details can be found by invoking the script with the \verb|-h| flag.
+	\item The book in HTML form is fetched from the URL specified. Using the \verb|BeautifulSoup| package, it is converted entirely to text.
+	\item Using regular expressions, points of demarcation of individual chapters are found. Similarly, the point demarcating the end of the book is also found.
+	\item The book text is split into individual chapters. Each chapter is saved in the separate text file in the output path specified.
+	\item The file name for each chapter includes the URL where the book was obtained from. However, forward slashes (\verb|/|) are replaced with the \verb|#| character.
+\end{enumerate}
+
+\subsubsection*{Notes}
+\begin{enumerate}
+	\item To use the script for other Project Gutenberg books, the regular experssions for finding the chapter demarcator and the demarcator for the end of the book may have to be modified.
+	\item A verbose mode, with the \verb|-v| flag, is provided for more verbose output.
+\end{enumerate}
 \end{flushleft}
 \newpage
 
