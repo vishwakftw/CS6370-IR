@@ -21,9 +21,9 @@ def compute_entropy_from_matrix(matrix):
     """
     count_list = np.sum(matrix, axis=0)
     prob_matrix = matrix / count_list
-    prob_matrix[np.isnan(prob_matrix)] = 0  # This will make 0/0 errors not cause issue later on
+    prob_matrix[np.isnan(prob_matrix)] = 0
     prob_matrix = prob_matrix * np.log(prob_matrix)
-    prob_matrix[np.isinf(prob_matrix)] = 0  # This will make log(0) = -inf not cause issues later on
+    prob_matrix[np.isinf(prob_matrix) | np.isnan(prob_matrix)] = 0
     clf_list = -np.sum(prob_matrix, axis=0)
     return clf_list
 
@@ -115,13 +115,15 @@ if p.chapter_wise:
 
     for doc_id, cnt in chapter_counters:
         # First print the top-k words and then generate the distribution plot
-        print("Top-{} words in chapter {}".format(p.top_k, doc_id))
+        chapter = os.path.basename(doc_db_filepath[doc_id])
+        chapter = chapter[:chapter.find('_')]
+        print("Top-{} words in chapter {}".format(p.top_k, chapter))
         for mcw in cnt.most_common(p.top_k):
             print("{}: {}".format(mcw[0], mcw[1]))
         print("=====\n")
 
         plt.figure(figsize=(10, 8))
-        plt.title('Frequency distribution for chapter {}'.format(doc_id))
+        plt.title('Frequency distribution for chapter {}'.format(chapter))
         plt.hist(cnt.values(), bins='auto')
         plt.xlabel('Number of occurrences')
         plt.ylabel('Number of terms')
@@ -132,7 +134,7 @@ else:
     # Scheme matters here
     # We will build a matrix of counts per chapters for every term in the dictionary
     # Every row in the dictionary is the count for a different terms in one chapter
-    term_matrix = np.array([[cnt[t] for t in cur_dictionary] for cnt in chapter_counters])
+    term_matrix = np.array([[cnt[t] for t in cur_dictionary] for doc_id, cnt in chapter_counters])
 
     if p.top_k_scheme == "frequency":
         term_clf_list = np.sum(term_matrix, axis=0)
@@ -143,6 +145,7 @@ else:
         indexes = np.argsort(term_clf_list)[::-1]  # Reverse order i.e., descending
 
     if p.top_k_scheme == "custom":
+        pass
         # TODO
 
     print("Top-{} words in the book by {}".format(p.top_k, p.top_k_scheme))
