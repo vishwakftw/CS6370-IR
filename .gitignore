@@ -12,6 +12,7 @@ datasets/
 *.bbl
 *.xml
 *.pdf
+*.synctex.gz
 
 # Text files for stories
 *.txt
@@ -25,3 +26,10 @@ datasets/
 
 # Compressed files
 *.zip
+
+# PDF output - usually a bad idea to keep this in Git
+*.pdf
+
+# Sublime Text Project Files (usually contain absolute paths)
+*.sublime-project
+*.sublime-workspace
