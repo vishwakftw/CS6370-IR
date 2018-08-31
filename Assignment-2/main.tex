@@ -22,7 +22,7 @@ Vishwak Srinivasan\\\texttt{CS15BTECH11043}
 
 \section{Introduction}
 \begin{flushleft}
-    TODO
+TODO
 \end{flushleft}
 
 \section{Task 1: Crawling \& Parsing HTML}
@@ -31,7 +31,6 @@ The first step is to get the book in HTML form, given its URL, and to split it i
 
 The procedure is as follows:
 \begin{enumerate}
-	\item The user, when invoking the script, specifies the book URL (default - \textit{Pride and Prejudice} from Project Gutenberg) and the path where the text files for each chapter must be saved (defult - a \verb|data/| directory inside the \verb|Assignment-2| directory). A directory is created as specified by the output path if it does not exist. Further details can be found by invoking the script with the \verb|-h| flag.
 	\item The book in HTML form is fetched from the URL specified. Using the \verb|BeautifulSoup| package, it is converted entirely to text.
 	\item Using regular expressions, points of demarcation of individual chapters are found. Similarly, the point demarcating the end of the book is also found.
 	\item The book text is split into individual chapters. Each chapter is saved in the separate text file in the output path specified.
@@ -41,7 +40,7 @@ The procedure is as follows:
 \subsubsection*{Notes}
 \begin{enumerate}
 	\item To use the script for other Project Gutenberg books, the regular experssions for finding the chapter demarcator and the demarcator for the end of the book may have to be modified.
-	\item A verbose mode, with the \verb|-v| flag, is provided for more verbose output.
+	\item Usage instructions in further detail can be found in the \verb|README.md| file.
 \end{enumerate}
 \end{flushleft}
 \newpage
@@ -49,7 +48,7 @@ The procedure is as follows:
 \section{Task 2}
 \subsection{Text processing of the datasets}
 \begin{flushleft}
-	Below are the steps for processing:
+	The following are the steps for processing:
 	\begin{enumerate}
         \item Case Folding - convert all documents to lower case. For example: ``I didn't create Atlantis'' becomes ``i didn't create atlantis''.
         \item Removal of special characters and digits - all special characters (quotes, commas, apostrophes, fullstops, etc.) and digits (0 to 9) were removed. This meant that at the end of this step we had nothing but raw text composed of alphabets alone. For example: ``don't'' becomes ``dont'' and ``ariane-5'' becomes ``ariane''.
@@ -62,7 +61,7 @@ The procedure is as follows:
 \section{Plots, Top 20 words and Observations - Chapter Wise}
 \subsection{Plots Wise}
 \begin{flushleft}
-	Below are the frequency distribution plots obtained for 10 out of 62 chapters. 
+	The following are the frequency distribution plots obtained for 10 out of 62 chapters. 
 	\begin{figure}[H]
 		\begin{minipage}{0.45\linewidth}
 			\centering
@@ -87,7 +86,7 @@ The procedure is as follows:
 
 \subsection{Top 20 words}
 \begin{flushleft}
-	The top 20 words (based on frequency) obtained for 10 chapters :
+	The top 20 words (based on frequency) obtained for 10 chapters are as follows:
 	\begin{center}
 		\begin{tabular}{|p{0.08\textwidth}|p{0.37\textwidth}||p{0.08\textwidth}|p{0.37\textwidth}|}
 			\hline
