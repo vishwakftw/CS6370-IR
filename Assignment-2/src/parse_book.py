@@ -57,6 +57,7 @@ def get_parse_save_book(args):
 
     for chapter in range(len(chapter_indices) - 1):
         chapter_text = story_text[chapter_indices[chapter][1]: chapter_indices[chapter + 1][0]]
+        chapter_text = chapter_text.replace("“", '"').replace("”", '"')  # "curly" is technically not valid
         chapter_output_path = os.path.join(output_base_path,
                                            str(chapter + 1) + '_' + book_url.replace('/', '#') + '_text.txt')
         with open(chapter_output_path, 'w') as f:
