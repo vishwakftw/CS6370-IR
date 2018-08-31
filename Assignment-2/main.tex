@@ -24,13 +24,14 @@ Vishwak Srinivasan\\\texttt{CS15BTECH11043}
 	TODO
 \end{flushleft}
 
-\section{Task 1: Crawling \& Parsing HTML}
+\section{Processing}
+\subsection{Task 1: Crawling \& Parsing HTML}
 \begin{flushleft}
 	TODO
 \end{flushleft}
 \newpage
 
-\section{Task 2}
+\subsection{Task 2}
 \subsection{Text processing of the datasets}
 \begin{flushleft}
 	Below are the steps for processing:
@@ -38,7 +39,6 @@ Vishwak Srinivasan\\\texttt{CS15BTECH11043}
 		\item Case Folding - convert all documents to lower case. For example: ``I didn't create Atlantis'' becomes ``i didn't create atlantis''.
 		\item Removal of special characters and digits - all special characters (quotes, commas, apostrophes, fullstops, etc.) and digits (0 to 9) were removed. This meant that at the end of this step we had nothing but raw text composed of alphabets alone. For example: ``don't'' becomes ``dont'' and ``ariane-5'' becomes ``ariane''.
 		\item Removal of stop words - using \texttt{NLTK}'s corpus of stop words, this was easy.
-		\item Stemming - using \texttt{NLTK}'s \texttt{PorterStemmer} we were able to do this.
 		\item Lemmatization - for this we used \texttt{NLTK}'s \texttt{WordNetLemmatizer}.
 	\end{enumerate}
 \end{flushleft}
@@ -65,7 +65,7 @@ Vishwak Srinivasan\\\texttt{CS15BTECH11043}
 			\includegraphics[width=0.75\textwidth]{./images/9-chapter_wise-frequency.png}
 			\includegraphics[width=0.75\textwidth]{./images/10-chapter_wise-frequency.png}
 		\end{minipage}
-		% \caption{Results for Dataset 1 (Left) and Dataset 2 (Right).\newline{}These are log plots for better visualization. Each plot from top to bottom represents a sequence of processing steps.\newline{}These are (ordered from top to bottom): [1, 2], [1, 2, 3], [1, 2, 4], [1, 2, 5], [1, 2, 3, 4, 5]}
+		\caption{Each plot from top to bottom represents a different chapter.\newline{}These are (ordered from top to bottom): 62, 18, 43, 47, 16, 46, 53, 52, 35, 56}
 	\end{figure}
 \end{flushleft}
 
@@ -102,7 +102,7 @@ Vishwak Srinivasan\\\texttt{CS15BTECH11043}
 \subsection{Metric: Frequency}
 \subsubsection{Distribution Plot}
 \begin{flushleft}
-    \includegraphics[width=0.75\textwidth]{./images/frequency-distribution-book.png}
+	\includegraphics[width=0.75\textwidth]{./images/frequency-distribution-book.png}
 \end{flushleft}
 \subsubsection{Top 20 words}
 \begin{flushleft}
