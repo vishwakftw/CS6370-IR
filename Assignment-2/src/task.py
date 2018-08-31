@@ -161,7 +161,7 @@ else:
         plt.title('{} distribution for book'.format(p.top_k_scheme))
         plt.hist(term_clf_list, bins='auto')
         plt.xlabel('Number of occurrences')
-        plt.ylabel('Number of terms')        
+        plt.ylabel('Number of terms')
         plt.show()
 
     if p.scatter_freq_entropy:
