@@ -56,7 +56,7 @@ def get_parse_save_book(args):
     for chapter in range(len(chapter_indices) - 1):
         chapter_text = story_text[chapter_indices[chapter][1]: chapter_indices[chapter + 1][0]]
         chapter_output_path = os.path.join(output_base_path,
-                                           str(chapter + 1) + '_' + book_url.replace('/', '.') + '_text.txt')
+                                           str(chapter + 1) + '_' + book_url.replace('/', '_') + '_text.txt')
         with open(chapter_output_path, 'w') as f:
             f.write(chapter_text)
         if args.verbose:
@@ -65,7 +65,7 @@ def get_parse_save_book(args):
         stripped_story_text += (chapter_text + '\n')
 
     book_output_path = os.path.join(
-        output_base_path, book_url.replace('/', '.') + '_text.txt')
+        output_base_path, book_url.replace('/', '_') + '_text.txt')
     with open(book_output_path, 'w') as f:
         f.write(stripped_story_text)
     if args.verbose:
@@ -74,9 +74,9 @@ def get_parse_save_book(args):
 if __name__ == "__main__":
     parser = ArgumentParser(
         description='Given a URL of a book in HTML format, this script fetches \
-        the book, splits text into separate chapters, and saves the complete bo\
-        ok and each individual chapter in text files. Currently works for "Prid\
-        e and Prejudice" by Jane Austen from Project Gutenberg.')
+        the book, splits text into separate chapters, and saves the complete book \
+        and each individual chapter in text files. Currently works for "Pride \
+        and Prejudice" by Jane Austen from Project Gutenberg.')
     parser.add_argument(
         '--book_url', default='https://www.gutenberg.org/files/1342/1342-h/1342-h.htm', type=str, help='URL of HTML book')
     parser.add_argument('--save_path', default=os.path.join('..', 'data'), type=str,
