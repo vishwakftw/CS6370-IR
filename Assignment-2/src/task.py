@@ -21,7 +21,7 @@ def compute_entropy_from_matrix(matrix):
     """
     count_list = np.sum(matrix, axis=0)
     prob_matrix = matrix / count_list
-    prob_matrix[np.isnan(prob_matrix)] = 0
+    prob_matrix[np.isinf(prob_matrix) | np.isnan(prob_matrix)] = 0
     prob_matrix = prob_matrix * np.log(prob_matrix)
     prob_matrix[np.isinf(prob_matrix) | np.isnan(prob_matrix)] = 0
     clf_list = -np.sum(prob_matrix, axis=0)
@@ -145,17 +145,22 @@ else:
         indexes = np.argsort(term_clf_list)[::-1]  # Reverse order i.e., descending
 
     if p.top_k_scheme == "custom":
-        pass
-        # TODO
+        term_clf_list = np.zeros(term_matrix.shape[1])  # ranks are zero-indexed
+        for row_idx in range(term_matrix.shape[0]):
+            rankings = np.argsort(term_matrix[row_idx])[::-1]
+            for index, rank in enumerate(rankings):
+                term_clf_list[rank] += index
+        indexes = np.argsort(term_clf_list)
 
     print("Top-{} words in the book by {}".format(p.top_k, p.top_k_scheme))
     for index in indexes[:p.top_k]:
         print("{}: {}".format(cur_dictionary[index], term_clf_list[index]))
 
-    plt.figure(figsize=(10, 8))
-    plt.title('Frequency distribution for book')
-    plt.hist(term_clf_list, bins='auto')
-    plt.show()
+    if p.top_k_scheme != "custom":
+        plt.figure(figsize=(10, 8))
+        plt.title('{} distribution for book'.format(p.top_k_scheme))
+        plt.hist(term_clf_list, bins='auto')
+        plt.show()
 
     if p.scatter_freq_entropy:
         # Compute the total occurrences of every term in the book
