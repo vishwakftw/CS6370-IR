@@ -74,26 +74,27 @@ Below are the plots obtained for Dataset 1 (CSV) and Dataset 2 (JSON).
 
 \subsubsection{Top 20 words}
 \begin{flushleft}
-The top 20 words obtained after each of the five sequences of processing steps are tabulated below (Dataset 1 on the left, Dataset 2 on the right):
+The top 20 words obtained after each of the five sequences of processing steps are tabulated below (Dataset 1 on the left, Dataset 2 on the right). Frequencies are specified in the brackets next to each word.
 \begin{center}
 \begin{tabular}{|p{0.08\textwidth}|p{0.37\textwidth}||p{0.08\textwidth}|p{0.37\textwidth}|}
 \hline
 Processing Steps & Top 20 Words & Processing Steps & Top 20 Words \\
 \hline
 \hline
-[1,2] & the, to, a, i, is, and, of, that, in, it, for, this, be, on, my, with, can, not, have, or &
-[1,2] & the, of, and, in, to, a, is, for, with, that, this, we, on, by, are, as, was, an, be, were\\
+[1,2] & the(204366), to(148692), a(118804), i(95778), is(84217), and(82792), of(67924), that(59615), in(55797), it(50473), for(43818), this(41526), be(37341), on(36058), my(34051), with(31263), can(28523), not(28099), have(27721), or(26475) &
+[1,2] & the(349582), of(249661), and(192456), in(151426), to(129629), a(122159), is(66532), for(64191), with(55686), that(55531), this(40477), we(38588), on(37331), by(36459), are(35817), as(34330), was(28140), an(26757), be(25963), were(25632)\\
 \hline
-[1,2,3] & would, key, server, using, password, use, security, like, user, im, data, one, know, access, could, way, get, secure, file, used &[1,2,3] & results, data, study, patients, using, also, model, system, used, paper, two, may, one, use, p, analysis, time, different, based, information\\
+[1,2,3] & would(17312), key(15577), server(15433), using(15154), password(15077), use(14767), security(14275), like(12590), user(11851), im(11610), data(11005), one(10183), know(9672), access(8941), could(8887), way(8017), get(7848), secure(7724), file(7555), used(7407) &
+[1,2,3] & results(14161), data(13526), study(12158), patients(11881), using(11515), also(10779), model(9790), system(9733), used(9683), paper(9674), two(9288), may(8521), one(8114), use(7593), p(7578), analysis(7464), time(7347), different(7332), based(7260), information(7069)\\
 \hline
-[1,2,4] & the, to, a, i, is, and, of, that, it, in, for, be, thi, use, on, my, with, have, can, not &
-[1,2,4] & the, of, and, in, to, a, is, for, with, that, thi, we, on, by, are, as, use, wa, be, an\\
+[1,2,4] & the(204366), to(148717), a(118804), i(95783), is(84217), and(82794), of(67924), that(60797), it(59041), in(55805), for(43818), be(41565), thi(41527), use(40149), on(36061), my(34051), with(31268), have(29873), can(28526), not(28099) &
+[1,2,4] & the(349584), of(249661), and(192462), in(151454), to(129631), a(122215), is(66532), for(64196), with(55686), that(55551), thi(40479), we(38588), on(37345), by(36459), are(35822), as(34330), use(31440), wa(28147), be(28021), an(26780)\\
 \hline
-[1,2,5] & the, to, a, i, is, and, of, that, it, in, for, this, be, on, my, with, can, not, have, or &
-[1,2,5] & the, of, and, a, in, to, is, for, with, that, this, we, on, by, are, wa, an, be, were, from\\
+[1,2,5] & the(204366), to(148692), a(142398), i(95783), is(84217), and(82792), of(67924), that(59615), it(59042), in(55805), for(43818), this(41526), be(37349), on(36058), my(34051), with(31263), can(28523), not(28099), have(27721), or(26478) &
+[1,2,5] & the(349582), of(249661), and(192456), a(156489), in(151454), to(129629), is(66532), for(64191), with(55686), that(55531), this(40477), we(38588), on(37331), by(36459), are(35821), wa(28147), an(26780), be(25969), were(25632), from(24417)\\
 \hline
-[1,2,3,4,5] & use, secur, password, key, server, user, would, encrypt, like, attack, file, im, data, one, know, access, get, certif, way, could &
-[1,2,3,4,5] & use, studi, result, model, system, patient, data, method, effect, differ, cell, present, develop, show, also, paper, function, activ, increas, perform\\
+[1,2,3,4,5] & use(40149), secur(23682), password(19616), key(19046), server(17984), user(17868), would(17312), encrypt(14454), like(13477), attack(12268), file(12010), im(11612), data(11021), one(10826), know(10786), access(10644), get(10408), certif(9827), way(9003), could(8888) &
+[1,2,3,4,5] & use(31440), studi(19617), result(18490), model(16591), system(16111), patient(13965), data(13536), method(12932), effect(12907), differ(12233), cell(11615), present(11196), develop(10902), show(10831), also(10779), paper(10230), function(10075), activ(9980), increas(9893), perform(9526)\\
 \hline
 \end{tabular}
 \end{center}
@@ -164,7 +165,7 @@ Text processing for this task involved steps 1 and 2 describes in the previous s
 
 \subsubsection{Observations}
 \begin{flushleft}
-Visual observation suggests that these plots are very "linear". This verifies the generalized Heaps' Law. Fitting the log-log plot to a linear function, gives us the values of the constants in Heaps' Law:
+Visual observation suggests that these plots are very ``linear''. This verifies the generalized Heaps' Law. Fitting the log-log plot to a linear function, gives us the values of the constants in Heaps' Law:
 \begin{equation}
 V = \alpha T^{\beta} \Rightarrow \log V = \beta \log T + \log \alpha
 \end{equation}
@@ -182,7 +183,7 @@ Below are the computed values of \(\beta\) and \(\log \alpha\) from a best linea
 \end{tabular}
 \end{center}
 
-From Wikipedia, for typical English text corpora, the values of \(\beta\) is between 0.4 and 0.6, while the values of \(\alpha\) is between 10 and 100, which means \(\log \alpha\) is between 1 and 2. From this, one can call dataset 1 as a "non-typical" English text corpus, while dataset 2 is still close to the ranges.
+From Wikipedia, for typical English text corpora, the values of \(\beta\) is between 0.4 and 0.6, while the values of \(\alpha\) is between 10 and 100, which means \(\log \alpha\) is between 1 and 2. From this, one can call dataset 1 as a ``non-typical'' English text corpus, while dataset 2 is still close to the ranges.
 \(\newline\)
 
 On close observation, one can see that there are more points concentrated at the left end of the seemingly straight line. This is nothing very special, it is primarily due to the nature of the log-log plot.

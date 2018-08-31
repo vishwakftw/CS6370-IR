@@ -22,3 +22,6 @@ datasets/
 
 # Backup files
 *~
+
+# Compressed files
+*.zip
