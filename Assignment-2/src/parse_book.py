@@ -39,7 +39,7 @@ def get_parse_save_book(args):
         chapter_indices.append(chapter_index)
         current_chapter += 1
 
-    # Text that marks the end of the book. Books in Project Gutenberg seem t
+    # Text that marks the end of the book. Books in Project Gutenberg seem to
     # all have some variation of this, but this exact text will not work for
     # all cases. Written specifically for 'Pride and Prejudice' by Jane
     # Austen. Edit this as applicable for other books.
