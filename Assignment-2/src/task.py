@@ -124,7 +124,7 @@ if p.chapter_wise:
 
         plt.figure(figsize=(10, 8))
         plt.title('Frequency distribution for chapter {}'.format(chapter))
-        plt.hist(cnt.values(), bins='auto')
+        plt.hist(cnt.values(), bins='auto', color='g', rwidth=3.0, density=True)
         plt.xlabel('Number of occurrences')
         plt.ylabel('Number of terms')
         plt.show()
@@ -159,10 +159,11 @@ else:
     if p.top_k_scheme != "custom":
         plt.figure(figsize=(10, 8))
         plt.title('{} distribution for book'.format(p.top_k_scheme))
-        plt.hist(term_clf_list, bins='auto')
+        plt.hist(term_clf_list, bins='auto', color='g', rwidth=3.0, density=True)
         plt.xlabel('Number of occurrences')
-        plt.ylabel('Number of terms')        
+        plt.ylabel('Number of terms')
         plt.show()
+
 
     if p.scatter_freq_entropy:
         # Compute the total occurrences of every term in the book
