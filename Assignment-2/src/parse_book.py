@@ -70,9 +70,9 @@ def get_parse_save_book(args):
 if __name__ == "__main__":
     parser = ArgumentParser(
         description='Given a URL of a book in HTML format, this script fetches \
-        the book, splits text into separate chapters, and saves the complete bo\
-        ok and each individual chapter in text files. Currently works for "Prid\
-        e and Prejudice" by Jane Austen from Project Gutenberg.')
+        the book, splits text into separate chapters, and saves the complete book \
+        and each individual chapter in text files. Currently works for "Pride \
+        and Prejudice" by Jane Austen from Project Gutenberg.')
     parser.add_argument(
         '--book_url', default='https://www.gutenberg.org/files/1342/1342-h/1342-h.htm', type=str, help='URL of HTML book')
     parser.add_argument('--save_path', default=os.path.join('..', 'data'), type=str,
